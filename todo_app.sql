@@ -239,7 +239,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin_log_content_type_id_c4bce8eb_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -248,6 +248,9 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
+INSERT INTO `django_admin_log` VALUES
+(1,'2023-02-23 17:54:08.235141','1','Testing list to do',1,'[{\"added\": {}}]',7,1),
+(2,'2023-02-23 18:03:24.510637','1','Create first item: due 2023-03-02 17:59:56+00:00',1,'[{\"added\": {}}]',8,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -374,7 +377,7 @@ CREATE TABLE `todo_app_todoitem` (
   PRIMARY KEY (`id`),
   KEY `todo_app_todoitem_todo_list_id_eed59cca_fk_todo_app_todolist_id` (`todo_list_id`),
   CONSTRAINT `todo_app_todoitem_todo_list_id_eed59cca_fk_todo_app_todolist_id` FOREIGN KEY (`todo_list_id`) REFERENCES `todo_app_todolist` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -383,6 +386,8 @@ CREATE TABLE `todo_app_todoitem` (
 
 LOCK TABLES `todo_app_todoitem` WRITE;
 /*!40000 ALTER TABLE `todo_app_todoitem` DISABLE KEYS */;
+INSERT INTO `todo_app_todoitem` VALUES
+(1,'Create first item','Some description','2023-02-23 18:03:24.509639','2023-03-02 17:59:56.000000',1);
 /*!40000 ALTER TABLE `todo_app_todoitem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -398,7 +403,7 @@ CREATE TABLE `todo_app_todolist` (
   `title` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,6 +412,8 @@ CREATE TABLE `todo_app_todolist` (
 
 LOCK TABLES `todo_app_todolist` WRITE;
 /*!40000 ALTER TABLE `todo_app_todolist` DISABLE KEYS */;
+INSERT INTO `todo_app_todolist` VALUES
+(1,'Testing list to do');
 /*!40000 ALTER TABLE `todo_app_todolist` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -419,4 +426,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-23 17:03:53
+-- Dump completed on 2023-02-23 19:36:19
