@@ -378,7 +378,7 @@ CREATE TABLE `todo_app_todoitem` (
   PRIMARY KEY (`id`),
   KEY `todo_app_todoitem_todo_list_id_eed59cca_fk_todo_app_todolist_id` (`todo_list_id`),
   CONSTRAINT `todo_app_todoitem_todo_list_id_eed59cca_fk_todo_app_todolist_id` FOREIGN KEY (`todo_list_id`) REFERENCES `todo_app_todolist` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -389,7 +389,8 @@ LOCK TABLES `todo_app_todoitem` WRITE;
 /*!40000 ALTER TABLE `todo_app_todoitem` DISABLE KEYS */;
 INSERT INTO `todo_app_todoitem` VALUES
 (1,'Create first item','Some description','2023-02-23 18:03:24.509639','2023-03-02 17:59:56.000000',1),
-(2,'Second test item','це просто item для перевірки utf-8','2023-02-23 19:27:25.281092','2023-03-24 19:26:46.000000',1);
+(2,'Second test item','це просто item для перевірки utf-8','2023-02-23 19:27:25.281092','2023-03-24 19:26:46.000000',1),
+(3,'Cru item','text','2023-02-24 13:44:41.656359','2023-03-03 13:44:16.000000',4);
 /*!40000 ALTER TABLE `todo_app_todoitem` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,7 +406,7 @@ CREATE TABLE `todo_app_todolist` (
   `title` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -415,7 +416,10 @@ CREATE TABLE `todo_app_todolist` (
 LOCK TABLES `todo_app_todolist` WRITE;
 /*!40000 ALTER TABLE `todo_app_todolist` DISABLE KEYS */;
 INSERT INTO `todo_app_todolist` VALUES
-(1,'Testing list to do');
+(2,'CRU list'),
+(4,'Cru'),
+(1,'Testing list to do'),
+(3,'title');
 /*!40000 ALTER TABLE `todo_app_todolist` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -428,4 +432,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-23 20:36:37
+-- Dump completed on 2023-02-24 15:02:14
