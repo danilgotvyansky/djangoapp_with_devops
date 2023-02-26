@@ -1,5 +1,5 @@
 # Django application with DevOps practices #
-Danylo Hotvianskyi entry-level portfolio project. Stack: Django, Docker, Ansible, Nagios, Github actions
+Danylo Hotvianskyi entry-level portfolio project. Stack: Django, Docker, Ansible, Vagrant, Nagios, Github actions.
 
 **Project is not finished. In progress...**
 
