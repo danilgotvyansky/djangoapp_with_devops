@@ -1,0 +1,100 @@
+- hosts: control
+  become: true
+  tasks:
+    - name: Update and upgrade packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install required packages
+      apt:
+        name:
+          - autoconf
+          - gcc
+          - libc6
+          - make
+          - wget
+          - unzip
+          - apache2
+          - php
+          - libapache2-mod-php7.2
+          - libgd-dev
+        state: present
+        update_cache: yes
+
+    - name: Download Nagios
+      get_url:
+        url: "https://github.com/NagiosEnterprises/nagioscore/archive/nagios-4.4.5.tar.gz"
+        dest: "/tmp/nagioscore.tar.gz"
+
+    - name: Extract Nagios
+      unarchive:
+        src: "/tmp/nagioscore.tar.gz"
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Configure Nagios
+      command: "./configure --with-httpd-conf=/etc/apache2/sites-enabled"
+      args:
+        chdir: "/tmp/nagioscore-nagios-4.4.5"
+
+    - name: Build Nagios
+      become: yes
+      become_user: root
+      command: make all
+      args:
+        chdir: /tmp/nagioscore-nagios-4.4.5/
+
+    - name: Add Nagios user and group
+      user:
+        name: nagios
+        state: present
+
+    - name: Add www-data user to Nagios group
+      user:
+        name: www-data
+        groups: nagios
+        append: yes
+
+    - name: Install Nagios
+      become: yes
+      become_user: root
+      shell: |
+        make install -C /tmp/nagioscore-nagios-4.4.5/
+        make install-daemoninit -C /tmp/nagioscore-nagios-4.4.5/
+        make install-commandmode -C /tmp/nagioscore-nagios-4.4.5/
+        make install-config -C /tmp/nagioscore-nagios-4.4.5/
+
+    - name: Install Nagios web interface
+      become: yes
+      become_user: root
+      shell: |
+        make install-webconf -C /tmp/nagioscore-nagios-4.4.5/
+
+    - name: Enable required Apache modules
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - rewrite
+        - cgi
+
+    - name: Allow Apache through firewall
+      ufw:
+        rule: allow
+        name: "Apache"
+        state: enabled
+
+    - name: Reload UFW
+      ufw:
+        state: reloaded
+
+    - name: Restart Apache
+      systemd:
+        name: "apache2.service"
+        state: restarted
+
+    - name: Check Apache status
+      systemd:
+        name: "apache2.service"
+        state: started

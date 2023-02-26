@@ -1,0 +1,42 @@
+- hosts: control
+  become: true
+  tasks:
+    - name: Restart Apache
+      systemd:
+        name: "apache2.service"
+        state: restarted
+
+    - name: Check Apache status
+      systemd:
+        name: "apache2.service"
+        state: started
+
+    - name: Start Nagios Service
+      systemd:
+        name: "nagios.service"
+        state: started
+
+    - name: Install Nagios plugins
+      get_url:
+        url: "https://github.com/nagios-plugins/nagios-plugins/archive/release-2.2.1.tar.gz"
+        dest: "/tmp/nagios-plugins.tar.gz"
+
+    - name: Extract Nagios plugins
+      unarchive:
+        src: "/tmp/nagios-plugins.tar.gz"
+        dest: "/tmp"
+        remote_src: yes
+
+    - name: Set up&Configure plugins
+      become: yes
+      become_user: root
+      shell: |
+        cd /tmp/nagios-plugins-release-2.2.1/tools/
+        bash setup
+        cd /tmp/nagios-plugins-release-2.2.1/
+        bash configure
+
+    - name: Start Nagios Service
+      systemd:
+        name: "nagios.service"
+        state: started

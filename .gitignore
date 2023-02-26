@@ -3,3 +3,4 @@
 venv
 todo_app/__pycache__
 .vagrant
+*.retry
