@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   frontend:
@@ -16,8 +16,8 @@ services:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_NAME=todo
-      - DB_USER=admin
-      - DB_PASSWORD=secret
+      - DB_USER=todoadmin
+      - DB_PASSWORD=root
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
@@ -27,5 +27,6 @@ services:
     image: mariadb/server:10.3
     environment:
       - MARIADB_DATABASE=todo
-      - MARIADB_USER=admin
-      - MARIADB_PASSWORD=secret
+      - MARIADB_USER=todoadmin
+      - MARIADB_PASSWORD=root
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
