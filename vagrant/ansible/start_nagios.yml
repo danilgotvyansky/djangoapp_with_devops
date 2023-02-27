@@ -18,7 +18,7 @@
 
     - name: Install Nagios plugins
       get_url:
-        url: "https://github.com/nagios-plugins/nagios-plugins/archive/release-2.2.1.tar.gz"
+        url: "https://github.com/nagios-plugins/nagios-plugins/archive/release-2.3.3.tar.gz"
         dest: "/tmp/nagios-plugins.tar.gz"
 
     - name: Extract Nagios plugins
@@ -31,10 +31,11 @@
       become: yes
       become_user: root
       shell: |
-        cd /tmp/nagios-plugins-release-2.2.1/tools/
-        bash setup
-        cd /tmp/nagios-plugins-release-2.2.1/
-        bash configure
+        sudo apt-get install -y autoconf gcc libc6 libmcrypt-dev make libssl-dev wget bc gawk dc build-essential snmp libnet-snmp-perl gettext
+        cd /tmp/nagios-plugins-release-2.3.3/tools/
+        sudo bash setup
+        cd /tmp/nagios-plugins-release-2.3.3/
+        sudo bash configure
 
     - name: Start Nagios Service
       systemd:

@@ -6,7 +6,7 @@
       name: docker.io
       state: latest
 
-  - name: ensure docker is installed
+  - name: ensure docker-compose is installed
     apt:
       name: docker-compose
       state: latest
