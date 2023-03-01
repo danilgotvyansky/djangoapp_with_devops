@@ -1,4 +1,5 @@
 # Django To-Do list application # 
+# OUTDATED #
 Application on-line demo: [django.burava.com](https://django.burava.com)
 
 Application uses **MariaDB**(MySQL) database. Other requirements can be found [here](requirements.txt).

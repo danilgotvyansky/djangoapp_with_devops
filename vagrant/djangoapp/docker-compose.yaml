@@ -1,0 +1,38 @@
+version: "3.3"
+
+services:
+  db:
+    image: mariadb/server:10.3
+    environment:
+      - MARIADB_DATABASE=todo
+      - MARIADB_USER=todoadmin
+      - MARIADB_PASSWORD=secret
+      - MARIADB_ALLOW_EMPTY_PASSWORD=yes
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend/todo_app/static:/code/backend/todo_app/static
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=todo
+      - DB_USER=todoadmin
+      - DB_PASSWORD=secret
+    command: >
+      sh -c "/code/backend/wait-for-it.sh db:3306 -t 45 &&
+             python manage.py migrate &&
+             python manage.py collectstatic --noinput && 
+             DJANGO_SUPERUSER_PASSWORD=root python manage.py createsuperuser --noinput --username admin --email sasi.pisos@gmail.com &&
+             python manage.py runserver 0.0.0.0:8000"
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./backend/todo_app/static:/usr/share/nginx/html
+    depends_on:
+      - backend

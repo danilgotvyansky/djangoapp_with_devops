@@ -26,11 +26,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-
+# DJANGO_SUPERUSER_PASSWORD = '123123'
+# DJANGO_SUPERUSER_USERNAME = 'admin'
+# DJANGO_SUPERUSER_EMAIL = 'sasi.pisos@gmail.com'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '192.168.6.3']
 
 
 # Application definition
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todo_app',
+    'django_createsuperuser',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +139,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, '../frontend')]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, '../frontend')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

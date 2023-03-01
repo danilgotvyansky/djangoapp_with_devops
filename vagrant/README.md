@@ -1,5 +1,5 @@
-# Setting up the Lab using Vagrant
-## Vagrantfile
+# Setting up the Lab using Vagrant #
+## Vagrantfile ##
 1. Open the **Vagrantfile** in the **vagrant** directory using any IDE/text editor.
 2. As you can see, this project offers you to use **Virtualbox** for setting up your lab. You can re-write this file to use **Docker** as your provisioner instead. 
 

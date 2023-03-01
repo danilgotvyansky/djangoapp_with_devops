@@ -10,7 +10,7 @@ The idea of this project is to visualize the DevOps practices deploying the Djan
 [Application](djangoapp/README.md) in the project is the Django To Do list application with the MariaDB database. The project idea is not about the application itself, it is just used as an example. 
 
 Application on-line demo: [django.burava.com](https://django.burava.com)
-
+# OUTDATED #
 ### Plan: ###
 * [Vagrant](vagrant/README.md) is used to launch 3 VM servers in VirtualBox:
   * *control* server is used to operate the other two servers. On this server, we will install Ansible and Nagios to monitor our project application.
