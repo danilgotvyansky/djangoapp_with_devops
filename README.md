@@ -12,7 +12,7 @@ The idea of this project is to visualize the DevOps practices deploying the Djan
 Application on-line demo: [django.burava.com](https://django.burava.com)
 # OUTDATED #
 ### Project Diagram ###
-![Image1](https://drive.google.com/file/d/16W78JDM-A8yXQ9Rna3uEVGjvTz2S_k6f/view?usp=sharing)
+![Image1](plan.png)
 
 ### Plan: ###
 * [Vagrant](vagrant/README.md) is used to launch 3 VM servers in VirtualBox:
