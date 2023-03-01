@@ -4,5 +4,5 @@ venv
 todo_app/__pycache__
 .vagrant
 *.retry
-static
+admin
 __pycache__

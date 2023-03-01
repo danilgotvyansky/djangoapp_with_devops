@@ -2,5 +2,5 @@
 control
 
 [nodes]
-nodeapp
-nodedb
+node1
+node2

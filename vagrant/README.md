@@ -34,14 +34,13 @@ sudo cp /vagrant/hosts /etc/hosts
 ```
 3. Add ssh keys to your nodes to make sure *Ansible* will be able to do configurations without prompting password.
 
-* Go back to the vagrant folder and generate key pair:
+* Generate key pair:
 ```
-cd ../vagrant
 ssh-keygen
 ```
 * Then push our keys to the nodes:
 ```
-ssh-copy-id nodeapp && ssh-copy-id nodedb
+ssh-copy-id node1 && ssh-copy-id node1
 ```
 
 Now we are ready to install **Ansible** on our control machine. Click [here](ansible/README.md) to open the next instruction. 

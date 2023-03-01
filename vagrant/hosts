@@ -7,5 +7,5 @@ ff02::1 ip6-allnodes
 ff02::2 ip6-allrouters
 
 192.168.6.2 control
-192.168.6.3 nodeapp
-192.168.6.4 nodedb
+192.168.6.3 node1
+192.168.6.4 node2
