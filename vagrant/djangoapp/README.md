@@ -56,4 +56,3 @@ docker-compose build && docker-compose up
 You should be able to open the application on the http://{your_node1_IP}:8000 link.
 
 Later I will add the application image to the *GitHub Registry* and re-create the [docker-compose.yaml](docker-compose.yaml) file to build the container without building an image.
-

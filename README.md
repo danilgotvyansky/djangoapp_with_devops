@@ -10,7 +10,7 @@ The idea of this project is to visualize the DevOps practices deploying the Djan
 [Application](vagrant/djangoapp/README.md) in the project is the Django To Do list application with the MariaDB database. The project idea is not about the application itself, it is just used as an example. 
 
 Application on-line demo: [django.burava.com](https://django.burava.com)
-# OUTDATED #
+
 ### Project Diagram ###
 ![Image1](plan.png)
 
