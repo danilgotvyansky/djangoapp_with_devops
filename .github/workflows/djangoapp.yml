@@ -29,16 +29,10 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        cd vagrant/djangoapp
-        ls
-        pwd
-        python -m pip install --upgrade pip       
-        pip install -r requirements.txt
     - name: Set up MariaDB
       run: |
         sudo apt-get install mariadb-server
+        sudo apt-get install libmysqlclient-dev
         sudo mysql -e "CREATE DATABASE $DB_NAME;"
         sudo mysql -e "CREATE USER $DB_USER@localhost IDENTIFIED BY '$DB_PASSWORD';"
         sudo mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO $DB_USER@localhost;"
@@ -47,6 +41,13 @@ jobs:
         DB_NAME: ${{ secrets.DB_NAME }}
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    - name: Install Dependencies
+      run: |
+        cd vagrant/djangoapp
+        ls
+        pwd
+        python -m pip install --upgrade pip       
+        pip install -r requirements.txt
     - name: Run Tests
       env:
         DB_NAME: ${{ secrets.DB_NAME }}
