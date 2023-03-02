@@ -33,10 +33,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       run: |
-        cd vagrant/djangoapp
         python -m pip install --upgrade pip
-        ls
-        pip install -r requirements.txt
+        cd vagrant/djangoapp && pip install -r requirements.txt
     - name: Set up MariaDB
       run: |
         sudo apt-get install mariadb-server
