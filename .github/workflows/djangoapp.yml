@@ -26,15 +26,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        path: vagrant/djangoapp
+        path: djangoapp_with_devops/vagrant/djangoapp
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       run: |
-        python -m pip install --upgrade pip
-        cd vagrant/djangoapp
+        python -m pip install --upgrade pip       
         ls
         pwd
         pip install -r requirements.txt
