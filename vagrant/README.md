@@ -40,7 +40,7 @@ ssh-keygen
 ```
 * Then push our keys to the nodes:
 ```
-ssh-copy-id node1 && ssh-copy-id node1
+ssh-copy-id node1 && ssh-copy-id node2
 ```
 
 Now we are ready to install **Ansible** on our control machine. Click [here](ansible/README.md) to open the next instruction. 
