@@ -28,7 +28,6 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['0.0.0.0', '192.168.6.3', 'localhost', '192.168.6.4','192.168.6.2',]
 
-
 # Application definition
 
 INSTALLED_APPS = [
