@@ -60,3 +60,20 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
+
+    # Check if the job failed and delete the database and user if it did
+    # Note: You may need to modify the SQL statements based on your database setup
+    post:
+      if: ${{ job.status != 'success' }}
+      runs-on: self-hosted
+      env:
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_USER: ${{ secrets.DB_USER }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      steps:
+      - name: Delete Database
+        run: |
+          sudo mysql -e "DROP DATABASE $DB_NAME;"
+      - name: Delete User
+        run: |
+          sudo mysql -e "DROP USER $DB_USER@localhost;"
