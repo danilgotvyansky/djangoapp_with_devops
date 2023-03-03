@@ -69,8 +69,6 @@ jobs:
     - name: Install Dependencies
       run: |
         cd vagrant/djangoapp
-        ls
-        pwd
         python -m pip install --upgrade pip       
         pip install --use-pep517 -r requirements.txt
     - name: Run Tests
