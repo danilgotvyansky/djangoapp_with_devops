@@ -62,12 +62,6 @@ jobs:
           sudo mysql -e "FLUSH PRIVILEGES;"
           export USER_EXISTS=false
         fi
-#          if [ "$DB_EXISTS" = true ] && [ "$USER_EXISTS" = true ]
-#          then
-#            export SKIP_DB_USER_CREATION=true
-#          else
-#            export SKIP_DB_USER_CREATION=false
-#          fi
       env:
         DB_NAME: ${{ secrets.DB_NAME }}
         DB_USER: ${{ secrets.DB_USER }}
@@ -91,3 +85,11 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
+    - name: Build and Push Docker Image
+      uses: mr-smithers-excellent/docker-build-push@v4
+      with:
+        image: danylohotvianskyi/images_and_containers
+        dockerfile: vagrant/djangoapp/Dockerfile
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
