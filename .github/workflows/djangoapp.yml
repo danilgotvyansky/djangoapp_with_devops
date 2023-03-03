@@ -13,6 +13,7 @@ env:
   DB_HOST: 192.168.6.2
   DB_PORT: ${{ secrets.DB_PORT }}
   DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+  DEBUG: TRUE
 
 jobs:
   build:
@@ -84,6 +85,7 @@ jobs:
         DB_HOST: 192.168.6.2
         DB_PORT: ${{ secrets.DB_PORT }}
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        DEBUG: TRUE
       run: |
         cd vagrant/djangoapp
         python manage.py test
