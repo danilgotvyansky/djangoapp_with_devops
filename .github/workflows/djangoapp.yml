@@ -83,8 +83,8 @@ jobs:
         python manage.py test
     - name: Build and Push Docker Image
       run: |
-        sudo docker build -t images_and_containers/djangoapp:latest vagrant/djangoapp
+        sudo docker build -t images_and_containers/djangoapp:djangoapp vagrant/djangoapp
         echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker.io
-        sudo docker tag images_and_containers/djangoapp:latest images_and_containers/djangoapp:latest
-        sudo docker push images_and_containers/djangoapp:latest
+        sudo docker tag images_and_containers/djangoapp:djangoapp images_and_containers/djangoapp:djangoapp
+        sudo docker push images_and_containers/djangoapp:djangoapp
 
