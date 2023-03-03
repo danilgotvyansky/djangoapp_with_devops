@@ -31,6 +31,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Set up MariaDB
       run: |
+        sudo apt-get -y update
         sudo apt-get -y install mariadb-server
         sudo apt-get -y install libmysqlclient-dev
         sudo mysql -e "CREATE DATABASE $DB_NAME;"
