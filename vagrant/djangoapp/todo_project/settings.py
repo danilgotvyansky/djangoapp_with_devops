@@ -19,16 +19,11 @@ environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-# DJANGO_SUPERUSER_PASSWORD = '123123'
-# DJANGO_SUPERUSER_USERNAME = 'admin'
-# DJANGO_SUPERUSER_EMAIL = 'sasi.pisos@gmail.com'
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = env('DJANGO_SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['0.0.0.0', '192.168.6.3', 'localhost', '192.168.6.4','192.168.6.2',]
@@ -91,17 +86,6 @@ DATABASES = {
         'PORT': env('DB_PORT'),
     }
 }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': '',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#         'PORT': '',
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
