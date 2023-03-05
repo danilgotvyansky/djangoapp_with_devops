@@ -22,7 +22,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -94,7 +94,8 @@ jobs:
     - name: Deploy image to node 1
       run: |
         ssh node1
-        cd / 
+        cd /
         cd /vagrant/djangoapp
-        pwd
+        sudo docker-compose ps
         sudo docker-compose up -d
+        sudo docker-compose ps
