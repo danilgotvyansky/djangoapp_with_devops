@@ -3,6 +3,8 @@ name: Django CI
 on:
   push:
     branches: [ "main" ]
+    paths:
+    - "vagrant/djangoapp/**"
   pull_request:
     branches: [ "main" ]
 
@@ -91,13 +93,22 @@ jobs:
         sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
         sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest 
 
-    - name: Deploy image to node 1
+    - name: Deploy image to node1
       run: |
         ssh node1
         cd /
         cd /vagrant/djangoapp
-        sudo docker-compose ps
-        pwd
-        ls -al
         sudo docker-compose up -d
-        sudo docker-compose ps
+        
+    - name: Log out from node1
+      run: logout
+        
+    - name: Deploy image to node2
+      run: |
+        ssh node2
+        cd /
+        cd /vagrant/djangoapp
+        sudo docker-compose up -d
+        
+    - name: Log out from node2
+      run: logout
