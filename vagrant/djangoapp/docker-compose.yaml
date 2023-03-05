@@ -7,7 +7,7 @@ services:
       - .env
 
   application:
-    build: ./
+    image: ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
     ports:
       - "8000:8000"
     depends_on:
