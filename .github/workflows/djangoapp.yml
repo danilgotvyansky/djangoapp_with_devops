@@ -94,7 +94,7 @@ jobs:
     - name: Deploy image to node 1
       run: |
         ssh node1
-        cd/ 
+        cd / 
         cd /vagrant/djangoapp
         pwd
         sudo docker-compose up -d
