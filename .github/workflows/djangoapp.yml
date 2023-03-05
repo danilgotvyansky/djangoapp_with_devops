@@ -24,7 +24,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.8, 3.9]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v2
@@ -62,12 +62,6 @@ jobs:
           sudo mysql -e "FLUSH PRIVILEGES;"
           export USER_EXISTS=false
         fi
-#          if [ "$DB_EXISTS" = true ] && [ "$USER_EXISTS" = true ]
-#          then
-#            export SKIP_DB_USER_CREATION=true
-#          else
-#            export SKIP_DB_USER_CREATION=false
-#          fi
       env:
         DB_NAME: ${{ secrets.DB_NAME }}
         DB_USER: ${{ secrets.DB_USER }}
@@ -75,8 +69,6 @@ jobs:
     - name: Install Dependencies
       run: |
         cd vagrant/djangoapp
-        ls
-        pwd
         python -m pip install --upgrade pip       
         pip install --use-pep517 -r requirements.txt
     - name: Run Tests
@@ -91,3 +83,32 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
+        
+    - name: Login to GitHub Container Registry
+      run: |
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+    
+    - name: Build and Push Docker Image
+      run: |
+        sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
+        sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest 
+
+    - name: Deploy image to node1
+      run: |
+        ssh node1
+        cd /
+        cd /vagrant/djangoapp
+        sudo docker-compose up -d
+        
+    - name: Log out from node1
+      run: exit
+        
+    - name: Deploy image to node2
+      run: |
+        ssh node2
+        cd /
+        cd /vagrant/djangoapp
+        sudo docker-compose up -d
+        
+    - name: Log out from node2
+      run: exit
