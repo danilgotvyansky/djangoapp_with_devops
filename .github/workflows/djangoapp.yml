@@ -87,11 +87,10 @@ jobs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.mygittoken01 }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Build the hello-docker Docker image
+    - name: Build and Push Docker Image
       run: |
-        docker build . --tag ghcr.io/deselikem/hello-docker-gcr-demo:latest
-        docker run ghcr.io/deselikem/hello-docker-gcr-demo:latest
-        docker push ghcr.io/deselikem/hello-docker-gcr-demo:latest
+        sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
+        sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
     
