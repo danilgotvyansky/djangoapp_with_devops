@@ -92,5 +92,5 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
-        sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
+        sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest 
     
