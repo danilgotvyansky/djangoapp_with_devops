@@ -84,7 +84,7 @@ jobs:
     - name: Build and Push Docker Image
       run: |
         sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
-        echo "${{ secrets.mygittoken01 }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+        echo "${{ secrets.mygittoken01 }}" | sudo docker login -u ${{ github.actor }} --password-stdin ghcr.io -it
         sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
 
 
