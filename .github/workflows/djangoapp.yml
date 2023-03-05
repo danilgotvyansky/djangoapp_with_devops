@@ -81,10 +81,17 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
-    - name: Build and Push Docker Image
+        
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.mygittoken01 }}
+    
+    - name: Build the hello-docker Docker image
       run: |
-        sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
-        sudo docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.mygittoken01 }}
-        sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
-
-
+        docker build . --tag ghcr.io/deselikem/hello-docker-gcr-demo:latest
+        docker run ghcr.io/deselikem/hello-docker-gcr-demo:latest
+        docker push ghcr.io/deselikem/hello-docker-gcr-demo:latest
+    
