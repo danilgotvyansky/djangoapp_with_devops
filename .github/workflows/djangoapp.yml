@@ -3,8 +3,6 @@ name: Django CI
 on:
   push:
     branches: [ "main" ]
-    paths:
-    - "vagrant/djangoapp/**"
   pull_request:
     branches: [ "main" ]
 
@@ -101,7 +99,7 @@ jobs:
         sudo docker-compose up -d
         
     - name: Log out from node1
-      run: logout
+      run: exit
         
     - name: Deploy image to node2
       run: |
@@ -111,4 +109,4 @@ jobs:
         sudo docker-compose up -d
         
     - name: Log out from node2
-      run: logout
+      run: exit
