@@ -105,7 +105,9 @@ jobs:
 
     runs-on: node1
     steps:
-    
+    - name: Remove everything in _work
+      run: sudo rm -rf djangoapp_with_devops
+      
     - name: Login to GitHub Container Registry
       run: |
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
