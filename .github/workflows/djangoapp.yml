@@ -125,6 +125,7 @@ jobs:
       run: |
         sudo docker rm -f djangoapp
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        sudo docker pull ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
         sudo docker run --name djangoapp -d \
           -e DB_NAME: ${{ secrets.DB_NAME }}
           -e DB_USER: ${{ secrets.DB_USER }}
