@@ -99,8 +99,10 @@ jobs:
 #         sudo docker-compose up -d
 #         sudo docker-compose ps
 #         sudo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' djangoapp_application_1
-    - name: Start MariaDB on control
+
+    - name: Start MariaDB on node1
       run: |
+        ssh node1
         sudo docker rm -f mariadb
         sudo docker run --name mariadb -d \
           -v $PWD/mariadb:/var/lib/mysql \
@@ -110,7 +112,7 @@ jobs:
           -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
           -p 3307:3306 \
           mariadb/server:10.3
-    - name: Start Application on control
+    - name: Start Application on node1
       run: |
         sudo docker rm -f djangoapp
         sudo docker run --name djangoapp -d \
