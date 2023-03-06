@@ -127,7 +127,6 @@ jobs:
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
-                 DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} python manage.py createsuperuser --noinput &&
                  python manage.py runserver 0.0.0.0:8000"
 
   deploynode2:
@@ -171,6 +170,5 @@ jobs:
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
-                 DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} python manage.py createsuperuser --noinput &&
                  python manage.py runserver 0.0.0.0:8000"
 
