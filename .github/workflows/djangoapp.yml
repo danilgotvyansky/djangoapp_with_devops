@@ -3,8 +3,6 @@ name: Django CI
 on:
   push:
     branches: [ "main" ]
-    paths:
-    - "vagrant/djangoapp/**"
   pull_request:
     branches: [ "main" ]
 
