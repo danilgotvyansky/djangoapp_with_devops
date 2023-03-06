@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "Fixing-deploy-bugs" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Fixing-deploy-bugs" ]
 
 env:
   DB_NAME: ${{ secrets.DB_NAME }}
