@@ -127,13 +127,13 @@ jobs:
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
         sudo docker pull ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
         sudo docker run --name djangoapp -d \
-          -e DB_NAME: ${{ secrets.DB_NAME }}
-          -e DB_USER: ${{ secrets.DB_USER }}
-          -e DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          -e DB_HOST: 192.168.6.3
-          -e DB_PORT: 3306 \
-          -e DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-          -e DEBUG: TRUE
+          -e DB_NAME=${{ secrets.DB_NAME }} \
+          -e DB_USER=${{ secrets.DB_USER }} \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e DB_HOST=192.168.6.3 \
+          -e DB_PORT=3306 \
+          -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
+          -e DEBUG=TRUE \
           -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
           -e DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} \
           -e DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} \
