@@ -97,7 +97,8 @@ jobs:
         cd /
         cd /vagrant/djangoapp
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-        sudo docker-compose up -d
+        logs=$(sudo docker-compose up -d 2>&1)
+        echo "$logs"
         sudo docker-compose ps
         sudo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' djangoapp_application_1
 
