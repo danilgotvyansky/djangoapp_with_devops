@@ -2,11 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
-    paths:
-    - "vagrant/djangoapp/**"
+    branches: [ "main", "Fixing-deploy-bugs" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "Fixing-deploy-bugs" ]
 
 env:
   DB_NAME: ${{ secrets.DB_NAME }}
@@ -98,7 +96,7 @@ jobs:
         ssh node1
         cd /
         cd /vagrant/djangoapp
-        sudo docker-compose up -d
+        sudo docker-compose up
         
     - name: Log out from node1
       run: exit
