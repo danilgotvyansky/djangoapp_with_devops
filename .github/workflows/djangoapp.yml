@@ -117,7 +117,7 @@ jobs:
           -e DB_USER: ${{ secrets.DB_USER }}
           -e DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           -e DB_HOST: 192.168.6.2
-          -e DB_PORT: 3307
+          -e DB_PORT: 3307 \
           -e DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           -e DEBUG: TRUE
           -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
