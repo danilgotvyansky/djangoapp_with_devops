@@ -4,29 +4,22 @@ on:
   push:
     branches: [ "main" ]
     paths:
-    - "vagrant/djangoapp/**"
+    - "vagrant/djangoapp/**"    
   pull_request:
     branches: [ "main" ]
-
-env:
-  DB_NAME: ${{ secrets.DB_NAME }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_HOST: 192.168.6.2
-  DB_PORT: ${{ secrets.DB_PORT }}
-  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-  DEBUG: TRUE
 
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: control
     strategy:
       max-parallel: 4
       matrix:
         python-version: [3.9]
 
     steps:
+    - name: Remove everything in _work
+      run: sudo rm -rf djangoapp_with_devops
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -83,32 +76,99 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
-        
+
     - name: Login to GitHub Container Registry
       run: |
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-    
+
     - name: Build and Push Docker Image
       run: |
         sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
         sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest 
 
-    - name: Deploy image to node1
+  deploynode1:
+
+    needs: build
+    runs-on: node1
+    steps:
+    - name: Remove everything in _work
+      run: sudo rm -rf djangoapp_with_devops
+
+    - name: Login to GitHub Container Registry
       run: |
-        ssh node1
-        cd /
-        cd /vagrant/djangoapp
-        sudo docker-compose up -d
-        
-    - name: Log out from node1
-      run: exit
-        
-    - name: Deploy image to node2
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+    - name: Start MariaDB on node1
       run: |
-        ssh node2
-        cd /
-        cd /vagrant/djangoapp
-        sudo docker-compose up -d
-        
-    - name: Log out from node2
-      run: exit
+        sudo docker rm -f mariadb
+        sudo docker run --name mariadb -d \
+          -v $PWD/mariadb:/var/lib/mysql \
+          -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
+          -e MARIADB_USER=${{ secrets.DB_USER }} \
+          -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -p 3306:3306 \
+          mariadb/server:10.3
+    - name: Start Application on node1
+      run: |
+        sudo docker rm -f djangoapp
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        sudo docker pull ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
+        sudo docker run --name djangoapp -d \
+          -e DB_NAME=${{ secrets.DB_NAME }} \
+          -e DB_USER=${{ secrets.DB_USER }} \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e DB_HOST=192.168.6.3 \
+          -e DB_PORT=3306 \
+          -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
+          -e DEBUG=TRUE \
+          -p 8000:8000 \
+          --link mariadb:db \
+          ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
+          sh -c "python manage.py migrate &&
+                 python manage.py collectstatic --noinput &&
+                 python manage.py runserver 0.0.0.0:8000"
+
+  deploynode2:
+
+    needs: build
+    runs-on: node2
+    steps:
+    - name: Remove everything in _work
+      run: sudo rm -rf djangoapp_with_devops
+
+    - name: Login to GitHub Container Registry
+      run: |
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+    - name: Start MariaDB on node2
+      run: |
+        sudo docker rm -f mariadb
+        sudo docker run --name mariadb -d \
+          -v $PWD/mariadb:/var/lib/mysql \
+          -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
+          -e MARIADB_USER=${{ secrets.DB_USER }} \
+          -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -p 3306:3306 \
+          mariadb/server:10.3
+    - name: Start Application on node2
+      run: |
+        sudo docker rm -f djangoapp
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        sudo docker pull ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
+        sudo docker run --name djangoapp -d \
+          -e DB_NAME=${{ secrets.DB_NAME }} \
+          -e DB_USER=${{ secrets.DB_USER }} \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e DB_HOST=192.168.6.4 \
+          -e DB_PORT=3306 \
+          -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
+          -e DEBUG=TRUE \
+          -p 8000:8000 \
+          --link mariadb:db \
+          ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
+          sh -c "python manage.py migrate &&
+                 python manage.py collectstatic --noinput &&
+                 python manage.py runserver 0.0.0.0:8000"
+
