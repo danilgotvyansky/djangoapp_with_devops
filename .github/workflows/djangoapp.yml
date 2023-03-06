@@ -18,7 +18,7 @@ env:
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: control
     strategy:
       max-parallel: 4
       matrix:
@@ -99,10 +99,17 @@ jobs:
 #         sudo docker-compose up -d
 #         sudo docker-compose ps
 #         sudo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' djangoapp_application_1
+  deploynode1:
 
+    runs-on: node1
+    steps:
+    
+    - name: Login to GitHub Container Registry
+      run: |
+        echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+        
     - name: Start MariaDB on node1
       run: |
-        ssh node1
         sudo docker rm -f mariadb
         sudo docker run --name mariadb -d \
           -v $PWD/mariadb:/var/lib/mysql \
@@ -110,7 +117,7 @@ jobs:
           -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
           -e MARIADB_USER=${{ secrets.DB_USER }} \
           -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-          -p 3307:3306 \
+          -p 3306:3306 \
           mariadb/server:10.3
     - name: Start Application on node1
       run: |
@@ -119,8 +126,8 @@ jobs:
           -e DB_NAME: ${{ secrets.DB_NAME }}
           -e DB_USER: ${{ secrets.DB_USER }}
           -e DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          -e DB_HOST: 192.168.6.2
-          -e DB_PORT: 3307 \
+          -e DB_HOST: 192.168.6.3
+          -e DB_PORT: 3306 \
           -e DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           -e DEBUG: TRUE
           -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
