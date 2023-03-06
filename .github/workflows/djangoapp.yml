@@ -25,6 +25,8 @@ jobs:
         python-version: [3.9]
 
     steps:
+    - name: Remove everything in _work
+      run: sudo rm -rf djangoapp_with_devops
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
