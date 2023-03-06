@@ -134,17 +134,13 @@ jobs:
           -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
           -e DB_HOST=192.168.6.3 \
           -e DB_PORT=3306 \
-          -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
+          -e DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}" \
           -e DEBUG=TRUE \
-          -e DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} \
-          -e DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} \
-          -e DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} \
           -p 8000:8000 \
           --link mariadb:db \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
-                 DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD} DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME} DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL} python manage.py createsuperuser --noinput &&
                  python manage.py runserver 0.0.0.0:8000"
 
 #     - name: Log out from node1
