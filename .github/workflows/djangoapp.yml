@@ -138,7 +138,8 @@ jobs:
           -p 8000:8000 \
           --link mariadb:db \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
-          sh -c "python manage.py migrate &&
+          sh -c "echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin &&
+                 python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
                  DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD} DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME} DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL} python manage.py createsuperuser --noinput &&
                  python manage.py runserver 0.0.0.0:8000"
