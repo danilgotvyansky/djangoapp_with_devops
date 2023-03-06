@@ -95,6 +95,7 @@ jobs:
       run: |
         cd /
         cd /vagrant/djangoapp
+        sudo docker-compose logs
         sudo docker-compose up -d
         sudo docker-compose ps
         sudo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' djangoapp_application_1
