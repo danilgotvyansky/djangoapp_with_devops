@@ -101,7 +101,8 @@ jobs:
 #         sudo docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' djangoapp_application_1
     - name: Start MariaDB on control
       run: |
-        sudo docker run --rm --name mariadb -d \
+        sudo docker rm mariadb
+        sudo docker run --name mariadb -d \
           -v $PWD/mariadb:/var/lib/mysql \
           -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
           -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
@@ -111,7 +112,8 @@ jobs:
           mariadb/server:10.3
     - name: Start Application on control
       run: |
-        sudo docker run --rm --name djangoapp -d \
+        sudo docker rm djangoapp
+        sudo docker run --name djangoapp -d \
           -e DB_NAME: ${{ secrets.DB_NAME }}
           -e DB_USER: ${{ secrets.DB_USER }}
           -e DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
