@@ -9,11 +9,11 @@ Application uses **MariaDB**(MySQL) database. Other requirements can be found [h
 * [wait-for-it.sh](https://github.com/vishnubob/wait-for-it)
 
 ## Installation process ##
-Our application will be deployed on 2 nodes (node1 & node2). Each node will contain 2 *Docker containers*: one for application and one for the database.
+Our application is deployed on 2 nodes (node1 & node2). Each node will contain 2 *Docker containers*: one for application and one for the database.
 
-It is planned that later **GitHub actions** will automatically deploy our containers from our *control* machine (which will be set as the *self-hosted runner*) using the automatically built images which will be pushed to the GitHub Registry as well. 
+[GitHub actions](https://github.com/danilgotvyansky/djangoapp_with_devops/blob/main/.github/workflows/README.md) automatically builds the image, pushes it to the **GitHub registry** and then the package is pulled and launched on the both nodes as they are registered as *self-hosted runners*. 
 
-For now, I will show how to deploy application without GitHub actions as it hasn't been configured yet.
+Below you can find the steps to build the application manually if needed without the GitHub Actions workflow.
 
 1. Connect to your application server (*node1*).
 ```
@@ -44,9 +44,6 @@ DB_PORT=3306 #or you can set a custom one
 DB_NAME=<db_name> #here and below same as for MARIADB_*
 DB_USER=<db_user> 
 DB_PASSWORD=<db_password>
-DJANGO_SUPERUSER_PASSWORD=<django_admin_password>
-DJANGO_SUPERUSER_USERNAME=<django_admin_username> 
-DJANGO_SUPERUSER_EMAIL=<djanto_admin_email>
 ```
 4. Build and launch docker containers:
 ```
@@ -55,4 +52,23 @@ docker-compose build && docker-compose up
 ```
 You should be able to open the application on the http://{your_node1_IP}:8000 link.
 
-Later I will add the application image to the *GitHub Registry* and re-create the [docker-compose.yaml](docker-compose.yaml) file to build the container without building an image.
+### Django Admin SuperUser ###
+
+It is also recommended to create the **Django Admin SuperUser** for the administrative access to your application.
+1. Find your docker container ID:
+```
+sudo docker container ls
+```
+
+Copy the ID of your *application_1* Docker container here.
+2. Enter your container bash interactively:
+```
+sudo docker exec -it <your container id> bash
+```
+3. Create the Django Admin SuperUser:
+```
+python manage.py createsuperuser
+```
+
+Now you can check if you are able to log in to your Admin dashboard here:
+http://{your_node1_IP}:8000/admin

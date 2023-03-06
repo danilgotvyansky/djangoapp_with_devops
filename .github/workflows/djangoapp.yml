@@ -100,7 +100,6 @@ jobs:
 
     - name: Start MariaDB on node1
       run: |
-        sudo docker rm -f mariadb
         sudo docker run --name mariadb -d \
           -v $PWD/mariadb:/var/lib/mysql \
           -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -143,7 +142,6 @@ jobs:
 
     - name: Start MariaDB on node2
       run: |
-        sudo docker rm -f mariadb
         sudo docker run --name mariadb -d \
           -v $PWD/mariadb:/var/lib/mysql \
           -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -171,4 +169,3 @@ jobs:
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
                  python manage.py runserver 0.0.0.0:8000"
-
