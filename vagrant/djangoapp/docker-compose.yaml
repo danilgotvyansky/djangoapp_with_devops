@@ -15,8 +15,4 @@ services:
     env_file:
       - .env
     command: >
-      sh -c "/code/wait-for-it.sh ${DB_HOST}:${DB_PORT} -t 45 &&
-             python manage.py migrate &&
-             python manage.py collectstatic --noinput && 
-             DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD} DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME} DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL} python manage.py createsuperuser --noinput &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "/code/wait-for-it.sh ${DB_HOST}:${DB_PORT} -t 45"
