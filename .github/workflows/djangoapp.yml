@@ -8,15 +8,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-env:
-  DB_NAME: ${{ secrets.DB_NAME }}
-  DB_USER: ${{ secrets.DB_USER }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_HOST: 192.168.6.2
-  DB_PORT: ${{ secrets.DB_PORT }}
-  DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-  DEBUG: TRUE
-
 jobs:
   build:
 
@@ -85,28 +76,28 @@ jobs:
       run: |
         cd vagrant/djangoapp
         python manage.py test
-        
+
     - name: Login to GitHub Container Registry
       run: |
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-    
+
     - name: Build and Push Docker Image
       run: |
         sudo docker build -t ghcr.io/danilgotvyansky/djangoapp_with_devops:latest vagrant/djangoapp
         sudo docker push ghcr.io/danilgotvyansky/djangoapp_with_devops:latest 
 
   deploynode1:
-    
+
     needs: build
     runs-on: node1
     steps:
     - name: Remove everything in _work
       run: sudo rm -rf djangoapp_with_devops
-      
+
     - name: Login to GitHub Container Registry
       run: |
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-        
+
     - name: Start MariaDB on node1
       run: |
         sudo docker rm -f mariadb
@@ -140,17 +131,17 @@ jobs:
                  python manage.py runserver 0.0.0.0:8000"
 
   deploynode2:
-    
+
     needs: build
     runs-on: node2
     steps:
     - name: Remove everything in _work
       run: sudo rm -rf djangoapp_with_devops
-      
+
     - name: Login to GitHub Container Registry
       run: |
         echo "${{ secrets.GIT_PAT }}" | sudo docker login ghcr.io -u "${{ github.actor }}" --password-stdin
-        
+
     - name: Start MariaDB on node2
       run: |
         sudo docker rm -f mariadb
