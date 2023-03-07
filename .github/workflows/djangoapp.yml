@@ -114,10 +114,6 @@ jobs:
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
         fi
-        # Wait for the database to start
-        sleep 30
-        # Run SQL query for all tables
-        sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "USE ${{ secrets.DB_NAME }}; SHOW TABLES;" | tail -n +2 | xargs -I{} sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "ALTER TABLE {} CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;"
     - name: Start Application on node1
       run: |
         sudo docker rm -f djangoapp
@@ -166,11 +162,6 @@ jobs:
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
         fi
-        # Wait for the database to start
-        sleep 10
-        # Run SQL query for all tables
-        sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "USE ${{ secrets.DB_NAME }}; SHOW TABLES;" | tail -n +2 | xargs -I{} sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "ALTER TABLE {} CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;"
-
     - name: Start Application on node2
       run: |
         sudo docker rm -f djangoapp
