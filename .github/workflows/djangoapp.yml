@@ -110,10 +110,10 @@ jobs:
         else
             sudo docker run --name mariadb -d \
               -v $PWD/mariadb:/var/lib/mysql \
-              -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e MYSQL_DATABASE=${{ secrets.DB_NAME }} \
-              -e MYSQL_USER=${{ secrets.DB_USER }} \
-              -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
+              -e MARIADB_USER=${{ secrets.DB_USER }} \
+              -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin --init-connect='SET NAMES UTF8;'
@@ -158,10 +158,10 @@ jobs:
         else
             sudo docker run --name mariadb -d \
               -v $PWD/mariadb:/var/lib/mysql \
-              -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
-              -e MYSQL_DATABASE=${{ secrets.DB_NAME }} \
-              -e MYSQL_USER=${{ secrets.DB_USER }} \
-              -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
+              -e MARIADB_USER=${{ secrets.DB_USER }} \
+              -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin --init-connect='SET NAMES UTF8;'
