@@ -105,8 +105,9 @@ jobs:
 
     - name: Start MariaDB on node1
       run: |
-        if [[ "$(docker ps -q -f name=mariadb)" ]]; then
+        if [[ -z "$(sudo docker container ls -a -q -f name=mariadb)" ]]; then
             echo "MariaDB container already exists."
+            sudo docker start mariadb
         else
             sudo docker run --name mariadb -d \
               -v $PWD/mariadb:/var/lib/mysql \
