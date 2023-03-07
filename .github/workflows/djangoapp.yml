@@ -111,7 +111,7 @@ jobs:
               -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
               mariadb/server:10.3 \
-              --character-set-server=utf8 --collation-server=utf8_bin
+              --character-set-server=utf8 --collation-server=utf8_bin --init-connect='SET NAMES UTF8;'
             echo "MariaDB container created."
         fi
     - name: Start Application on node1
@@ -159,7 +159,7 @@ jobs:
               -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
               mariadb/server:10.3 \
-              --character-set-server=utf8 --collation-server=utf8_bin
+              --character-set-server=utf8 --collation-server=utf8_bin --init-connect='SET NAMES UTF8;'
             echo "MariaDB container created."
         fi
     - name: Start Application on node2
