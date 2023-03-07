@@ -105,10 +105,7 @@ jobs:
 
     - name: Start MariaDB on node1
       run: |
-        if [[ -z "$(sudo docker container ls -a -q -f name=mariadb)" ]]; then
-            echo "MariaDB container already exists."
-            sudo docker start mariadb
-        else
+        if [[ $(sudo docker container ls -a -q -f name=mariadb | wc -l) -eq 0 ]]; then
             sudo docker run --name mariadb -d \
               -v $PWD/mariadb:/var/lib/mysql \
               -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
@@ -119,6 +116,9 @@ jobs:
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin --init-connect='SET NAMES UTF8;'
             echo "MariaDB container created."
+        else
+            sudo docker start mariadb
+            echo "MariaDB container already exists."
         fi
     - name: Start Application on node1
       run: |
