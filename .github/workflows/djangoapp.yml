@@ -100,19 +100,24 @@ jobs:
 
     - name: Start MariaDB on node1
       run: |
-        if [[ -z "$(sudo docker container ls -a -q -f name=mariadb)" ]]; then
-          sudo docker run --name mariadb -d \
-            -v $PWD/mariadb:/var/lib/mysql \
-            -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
-            -e MARIADB_USER=${{ secrets.DB_USER }} \
-            -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -p 3306:3306 \
-            mariadb/server:10.3 \
-            --character-set-server=utf8 --collation-server=utf8_bin
+        if [[ "$(docker ps -q -f name=mariadb)" ]]; then
+            echo "MariaDB container already exists."
         else
-          sudo docker start mariadb
+            sudo docker run --name mariadb -d \
+              -v $PWD/mariadb:/var/lib/mysql \
+              -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MYSQL_DATABASE=${{ secrets.DB_NAME }} \
+              -e MYSQL_USER=${{ secrets.DB_USER }} \
+              -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -p 3306:3306 \
+              mariadb/server:10.3 \
+              --character-set-server=utf8 --collation-server=utf8_bin
+            echo "MariaDB container created."
         fi
+        # Wait for the database to start
+        sleep 10
+        # Run SQL query for all tables
+        sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "USE ${{ secrets.DB_NAME }}; SHOW TABLES;" | tail -n +2 | xargs -I{} sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "ALTER TABLE {} CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;"
     - name: Start Application on node1
       run: |
         sudo docker rm -f djangoapp
@@ -147,19 +152,25 @@ jobs:
 
     - name: Start MariaDB on node2
       run: |
-        if [[ -z "$(sudo docker container ls -a -q -f name=mariadb)" ]]; then
-          sudo docker run --name mariadb -d \
-            -v $PWD/mariadb:/var/lib/mysql \
-            -e MARIADB_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -e MARIADB_DATABASE=${{ secrets.DB_NAME }} \
-            -e MARIADB_USER=${{ secrets.DB_USER }} \
-            -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            -p 3306:3306 \
-            mariadb/server:10.3 \
-            --character-set-server=utf8 --collation-server=utf8_bin
+        if [[ "$(docker ps -q -f name=mariadb)" ]]; then
+            echo "MariaDB container already exists."
         else
-          sudo docker start mariadb
+            sudo docker run --name mariadb -d \
+              -v $PWD/mariadb:/var/lib/mysql \
+              -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -e MYSQL_DATABASE=${{ secrets.DB_NAME }} \
+              -e MYSQL_USER=${{ secrets.DB_USER }} \
+              -e MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              -p 3306:3306 \
+              mariadb/server:10.3 \
+              --character-set-server=utf8 --collation-server=utf8_bin
+            echo "MariaDB container created."
         fi
+        # Wait for the database to start
+        sleep 10
+        # Run SQL query for all tables
+        sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "USE ${{ secrets.DB_NAME }}; SHOW TABLES;" | tail -n +2 | xargs -I{} sudo docker exec mariadb mysql -u root -p${{ secrets.DB_PASSWORD }} -e "ALTER TABLE {} CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;"
+
     - name: Start Application on node2
       run: |
         sudo docker rm -f djangoapp
