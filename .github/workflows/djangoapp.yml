@@ -55,6 +55,7 @@ jobs:
           sudo mysql -e "FLUSH PRIVILEGES;"
           export USER_EXISTS=false
         fi
+        continue-on-error: true
         
     - name: Install Dependencies
       run: |
