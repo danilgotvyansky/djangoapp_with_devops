@@ -28,4 +28,4 @@ This step above is done to imagine that we have 3 different physical servers in 
 This [pipeline](.github/workflows/djangoapp.yml) will test our application, build an image of it and push it to the *GitHub Registry*. Then the nodes will pull that image and build containers using it. 
 * **Nagios** will be used to monitor both servers' performance. Also, it will monitor our application demo and notify us when there is any issue.
 * [HAProxy Load balancer](haproxy/README.md) is used to route the application traffic to node2 if node1 is down for some reason.
-* To ensure the *database synchronization* between node1 and node2, it is planned to configure the *Multi-Source Replication* system using the built-in MariaDB configuration between the databases through the mirror database on the control server or directly between node1 and node2 (I have not decided yet).
+* To ensure the *database synchronization* between node1 and node2, the [Multi-master Replication](replication.md) has been built.
