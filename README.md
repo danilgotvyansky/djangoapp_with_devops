@@ -1,8 +1,6 @@
 # Django application with DevOps practices #
 Danylo Hotvianskyi entry-level portfolio project. Stack: Django, Docker, Ansible, Vagrant, Nagios, GitHub actions.
 
-**Project is not finished. In progress...**
-
 ## Description of the project: ##
 The idea of this project is to visualize the DevOps practices by deploying the Django simple application using 3 different servers.
 
@@ -26,6 +24,6 @@ This step above is done to imagine that we have 3 different physical servers in 
 * [GitHub Actions](.github/workflows/README.md) is used to represent the *CI/CD* practices to automatically build, test, and deploy the application whenever changes are made to the repository. We will register our servers as the **GitHub self-hosted runners** to make them listen to our repository and once there is a new push/pull on it, it will trigger the pipeline on the *control*, *node1* and *node2* servers. 
  
 This [pipeline](.github/workflows/djangoapp.yml) will test our application, build an image of it and push it to the *GitHub Registry*. Then the nodes will pull that image and build containers using it. 
-* **Nagios** will be used to monitor both servers' performance. Also, it will monitor our application demo and notify us when there is any issue.
+* [Nagios](nagios/README.md) is used to monitor both servers' performance. Also, it will monitor our application demo and notify us when there is any issue.
 * [HAProxy Load balancer](haproxy/README.md) is used to route the application traffic to node2 if node1 is down for some reason.
 * To ensure the *database synchronization* between node1 and node2, the [Multi-master Replication](replication.md) has been built.
