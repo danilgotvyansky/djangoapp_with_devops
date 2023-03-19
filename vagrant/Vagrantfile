@@ -17,6 +17,12 @@ Vagrant.configure("2") do |config|
           :box => "bento/ubuntu-18.04",
           :ip => "192.168.6.4",
           :ssh_port => '21099'
+        },
+        {
+          :hostname => "haproxy",
+          :box => "bento/ubuntu-18.04",
+          :ip => "192.168.6.5",
+          :ssh_port => '22001'
         }
       ]
 

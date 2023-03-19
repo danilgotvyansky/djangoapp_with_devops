@@ -9,3 +9,4 @@ ff02::2 ip6-allrouters
 192.168.6.2 control
 192.168.6.3 node1
 192.168.6.4 node2
+192.168.6.5 haproxy
