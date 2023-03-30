@@ -43,6 +43,11 @@ sudo su - nagios
 chmod 700 ~/.ssh
 chmod 600 ~/.ssh/*
 ssh-keygen
+```
+Before copying the ssh id to the nodes make sure to connect via ssh to both nodes to add them to the known hosts and type **"yes"** when prompted.
+
+```
+ssh -p 21098 vagrant@node1 && ssh -p 21099 vagrant@node2
 ssh-copy-id vagrant@node1 && ssh-copy-id vagrant@node2
 ```
 
