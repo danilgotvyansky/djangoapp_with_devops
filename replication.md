@@ -10,17 +10,17 @@ Master-master replication on **node1**&**node2** with the resolved [Auto Increme
 
 ## Step-by-step guide on how to configure Multi-master MariaDB replication: ##
 1. Enter your mariadb docker container interactively on both servers:
-```commandline
-sudo docker exec -it <container-id> bash
+```shell
+sudo docker exec -it mariadb bash
 ```
 
 2. Install nano for both servers:
-```commandline
+```shell
 apt update && apt install nano
 ```
 
 3. Edit the *etc/mysql/my.cnf* file with the values:
-```commandline
+```shell
 nano etc/mysql/my.cnf
 ```
 
@@ -41,13 +41,13 @@ auto_increment_increment = 2
 auto_increment_offset = 1
 ```
 4. Logout from the containers and restart them:
-```commandline
+```shell
 exit
-sudo docker restart <container-id> 
+sudo docker restart mariadb 
 ```
 5. Enter your mariadb container again on the **node1** and log in to the MariaDB server:
-```commandline
-sudo docker exec -it <container-id> bash
+```shell
+sudo docker exec -it mariadb bash
 mysql -u root --password="<your-mysqlroot-pass>"
 ```
 
@@ -74,8 +74,8 @@ MariaDB [(none)]> show master status \g
 NOTE: Make sure not to quit the MariaDB server to prevent these values from being updated.
 
 8. Enter your mariadb container again on the **node2** and log in to the MariaDB server:
-```commandline
-sudo docker exec -it <container-id> bash
+```shell
+sudo docker exec -it mariadb bash
 mysql -u root --password="<your-mysqlroot-pass>"
 ```
 9. Set your **node2** replication source values:
@@ -125,7 +125,7 @@ Error response from daemon: Cannot link to a non running container: /mariadb AS 
 Error: failed to start containers: <container-id>
 ```
 You can rebuild the container by running these commands:
-```commandline
+```shell
 sudo docker rm -f djangoapp
 echo "<git-PAT>" | sudo docker login ghcr.io -u "<git-username>" --password-stdin
 sudo docker pull ghcr.io/danilgotvyansky/djangoapp_with_devops:latest
@@ -139,6 +139,7 @@ sudo docker run --name djangoapp -d \
 >   -e DEBUG=TRUE \
 >   -p 8000:8000 \
 >   --link mariadb:db \
+>   --restart unless-stopped \
 >   ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
 >   sh -c "python manage.py migrate &&
 >          python manage.py collectstatic --noinput &&
