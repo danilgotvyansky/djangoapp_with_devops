@@ -1,4 +1,4 @@
-- hosts: nodes
+- hosts: cluster
   become: yes
   tasks:
   - name: ensure docker is installed

@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: control
+    runs-on: control1
     strategy:
       max-parallel: 4
       matrix:
@@ -106,6 +106,7 @@ jobs:
               -e MARIADB_USER=${{ secrets.DB_USER }} \
               -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
+              --restart unless-stopped \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
@@ -128,6 +129,7 @@ jobs:
           -e DEBUG=TRUE \
           -p 8000:8000 \
           --link mariadb:db \
+          --restart unless-stopped \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
@@ -155,6 +157,7 @@ jobs:
               -e MARIADB_USER=${{ secrets.DB_USER }} \
               -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
+              --restart unless-stopped \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
@@ -177,6 +180,7 @@ jobs:
           -e DEBUG=TRUE \
           -p 8000:8000 \
           --link mariadb:db \
+          --restart unless-stopped \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
