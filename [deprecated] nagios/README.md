@@ -1,3 +1,7 @@
+# DEPRECATED* #
+
+Please note that the Nagios is no longer used for this project. [Prometheus](/prometheus/README.md) is used instead.
+
 # Nagios #
 Nagios is used to monitor both servers' performance. Also, it will monitor our application demo and notify us when there is any issue.
 
