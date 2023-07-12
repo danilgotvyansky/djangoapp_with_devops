@@ -20,7 +20,7 @@ NOTE: Make sure to edit all IP addresses with the ones corresponding to your ser
 
 2. Launch HAProxy inside the Docker container with the following command:
 ```commandline
-sudo docker run -d --privileged --user root -p 1935:1935 -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg -v /run/haproxy:/run/haproxy --name haproxy haproxy:latest
+sudo docker run -d --privileged --user root -p 1935:1935 -p 80:80 -v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg -v /run/haproxy:/run/haproxy --name haproxy --restart unless-stopped haproxy:latest
 ```
 
 Let's review the options and parameters of the command above:
@@ -28,6 +28,7 @@ Let's review the options and parameters of the command above:
 * `--user root` flag: to run the container as the root user. Since the container needs root privileges to bind to privileged ports (like port 1935), this ensures that the container has the necessary permissions.
 * `-v $(pwd)/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg` flag: to mount the [haproxy.cfg](haproxy.cfg) file from the current directory ($(pwd)) into the container's file system at the specified path. This allows you to provide a custom HAProxy configuration file for the container.
 * `-v /run/haproxy:/run/haproxy` flag: to mount the /run/haproxy directory from the host to the container. This ensures that HAProxy has access to the necessary runtime files and sockets.
+* `--restart unless-stopped` flag: to make Docker automatically start the container on system startup and keep it running unless it is manually stopped or if it exits with an error. If the container is stopped intentionally, it will not be automatically restarted.
 
 3. Edit the **hosts** file on your Local PC with this line in the end:
 ```ini
