@@ -1,6 +1,13 @@
-[control]
-control
+[controls]
+control1
+control2
 
 [nodes]
+node1
+node2
+
+[cluster]
+control1
+control2
 node1
 node2

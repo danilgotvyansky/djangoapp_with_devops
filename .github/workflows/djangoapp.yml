@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: control
+    runs-on: control1
     strategy:
       max-parallel: 4
       matrix:
@@ -34,29 +34,32 @@ jobs:
         sudo apt-get -y install libmysqlclient-dev
     - name: Check if database and user exist
       run: |
-        sudo mysql -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" | grep $DB_NAME
-        if [ $? -eq 0 ]
-        then
-          echo "Database already exists, skipping creation"
-        else
+        if [[ $(sudo mysql -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" | grep $DB_NAME | wc -l) -eq 0 ]]; then
           echo "Database does not exist, creating"
-          sudo mysql -e "CREATE DATABASE $DB_NAME;"
-        fi
-        sudo mysql -e "SELECT User FROM mysql.user WHERE User='$DB_USER'" | grep $DB_USER
-        if [ $? -eq 0 ]
-        then
-          echo "User already exists, skipping creation"
+          if ! sudo mysql -e "CREATE DATABASE $DB_NAME;"; then
+            echo "Failed to create the database"
+            exit 1
+          fi
         else
+          echo "Database already exists, skipping creation"
+        fi
+    
+        if ! sudo mysql -e "SELECT User FROM mysql.user WHERE User='$DB_USER'" | grep $DB_USER; then
           echo "User does not exist, creating"
-          sudo mysql -e "CREATE USER $DB_USER@localhost IDENTIFIED BY '$DB_PASSWORD';"
+          if ! sudo mysql -e "CREATE USER $DB_USER@localhost IDENTIFIED BY '$DB_PASSWORD';"; then
+            echo "Failed to create the user"
+            exit 1
+          fi
           sudo mysql -e "GRANT ALL PRIVILEGES ON $DB_NAME.* TO $DB_USER@localhost;"
           sudo mysql -e "FLUSH PRIVILEGES;"
+        else
+          echo "User already exists, skipping creation"
         fi
       env:
         DB_NAME: ${{ secrets.DB_NAME }}
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        
+
     - name: Install Dependencies
       run: |
         cd vagrant/djangoapp
@@ -106,6 +109,7 @@ jobs:
               -e MARIADB_USER=${{ secrets.DB_USER }} \
               -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
+              --restart unless-stopped \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
@@ -128,6 +132,7 @@ jobs:
           -e DEBUG=TRUE \
           -p 8000:8000 \
           --link mariadb:db \
+          --restart unless-stopped \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&
@@ -155,6 +160,7 @@ jobs:
               -e MARIADB_USER=${{ secrets.DB_USER }} \
               -e MARIADB_PASSWORD=${{ secrets.DB_PASSWORD }} \
               -p 3306:3306 \
+              --restart unless-stopped \
               mariadb/server:10.3 \
               --character-set-server=utf8 --collation-server=utf8_bin
             echo "MariaDB container created."
@@ -177,6 +183,7 @@ jobs:
           -e DEBUG=TRUE \
           -p 8000:8000 \
           --link mariadb:db \
+          --restart unless-stopped \
           ghcr.io/danilgotvyansky/djangoapp_with_devops:latest \
           sh -c "python manage.py migrate &&
                  python manage.py collectstatic --noinput &&

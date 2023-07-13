@@ -7,7 +7,7 @@ CI/CD practices are all represented in one file - [djangoapp.yml](djangoapp.yml)
 The workflow is being triggered by the pull requests and push (only when changes are made within the *vagrant/djangoapp/*** path) on the **main** branch.
 
 There **3 jobs** inside:
-1. *build:* It actually builds the application on the *control* server, tests it and then push the image to the **GitHub Registry**.
+1. *build:* It actually builds the application on the *control1* server, tests it and then push the image to the **GitHub Registry**.
 2. *deploynode1:* It pulls the application image from the **GitHub Registry** and builds the containers using the database and application images on the *node1*.
 3. *deploynode2:* It pulls the application image from the **GitHub Registry** and builds the containers using the database and application images on the *node2*.
 

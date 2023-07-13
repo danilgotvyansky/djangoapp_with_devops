@@ -26,7 +26,7 @@ If there are no errors, you should see 4 new running Ubuntu machines in your Vir
 *Note*: If you have used the Vagrant with other provisioner before, it may be required to run the **vagrant up --provider virtualbox** command instead.
 ## Setting up the SSH connection for Control machine ##
 
-1. After VMs creation, run the **vagrant ssh control** command to connect to your control machine.
+1. After VMs creation, run the **vagrant ssh control1** command to connect to your control machine.
 2. cd to the *root* directory and copy our hosts file to */etc/hosts*:
 ```
 cd /
@@ -40,7 +40,7 @@ ssh-keygen
 ```
 * Then push our keys to the nodes:
 ```
-ssh-copy-id node1 && ssh-copy-id node2 && ssh-copy-id haproxy
+ssh-copy-id node1 && ssh-copy-id node2 && ssh-copy-id control2
 ```
 
 Now we are ready to install **Ansible** on our control machine. Click [here](ansible/README.md) to open the next instruction. 
