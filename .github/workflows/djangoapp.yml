@@ -34,13 +34,11 @@ jobs:
         sudo apt-get -y install libmysqlclient-dev
     - name: Check if database and user exist
       run: |
-        sudo mysql -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" | grep $DB_NAME
-        if [ $? -eq 0 ]
-        then
-          echo "Database already exists, skipping creation"
-        else
+        if [[ $(sudo mysql -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='$DB_NAME'" | grep $DB_NAME | wc -l) -eq 0 ]]; then
           echo "Database does not exist, creating"
           sudo mysql -e "CREATE DATABASE $DB_NAME;"
+        else
+          echo "Database already exists, skipping creation"
         fi
         sudo mysql -e "SELECT User FROM mysql.user WHERE User='$DB_USER'" | grep $DB_USER
         if [ $? -eq 0 ]
@@ -56,7 +54,7 @@ jobs:
         DB_NAME: ${{ secrets.DB_NAME }}
         DB_USER: ${{ secrets.DB_USER }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        
+
     - name: Install Dependencies
       run: |
         cd vagrant/djangoapp
