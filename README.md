@@ -1,3 +1,4 @@
+123
 # Django application with DevOps practices #
 Danylo Hotvianskyi portfolio project. Stack: Django, Docker, Ansible, Vagrant, Prometheus, GitHub actions, HAProxy Load Balancer, Grafana.
 
